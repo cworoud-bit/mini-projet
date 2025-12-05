@@ -1,0 +1,50 @@
+2025-12-05 17:55:24,224 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 17:55:24,246 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 17:55:24,246 INFO METRICS {'cpu_percent': 0.0, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 852306, 'net_bytes_recv': 60503190}
+2025-12-05 17:56:21,311 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 17:56:21,329 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 17:56:21,329 INFO METRICS {'cpu_percent': 0.1, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 852702, 'net_bytes_recv': 60503496}
+2025-12-05 17:57:19,185 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 17:57:19,204 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 17:57:19,204 INFO METRICS {'cpu_percent': 0.0, 'ram_percent': 6.2, 'disk_percent': 0.3, 'net_bytes_sent': 853008, 'net_bytes_recv': 60505782}
+2025-12-05 17:58:18,610 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 17:58:18,629 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 17:58:18,629 INFO METRICS {'cpu_percent': 0.1, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 853266, 'net_bytes_recv': 60506040}
+2025-12-05 17:59:16,167 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 17:59:16,196 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 17:59:16,196 INFO METRICS {'cpu_percent': 0.1, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 853572, 'net_bytes_recv': 60508326}
+2025-12-05 18:00:13,890 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 18:00:13,914 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 18:00:13,914 INFO METRICS {'cpu_percent': 0.0, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 853878, 'net_bytes_recv': 60508632}
+2025-12-05 18:01:10,806 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 18:01:10,827 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 18:01:10,827 INFO METRICS {'cpu_percent': 0.1, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 854232, 'net_bytes_recv': 60520788}
+2025-12-05 18:02:10,317 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 18:02:10,336 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 18:02:10,336 INFO METRICS {'cpu_percent': 0.1, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 854448, 'net_bytes_recv': 60521004}
+2025-12-05 18:03:08,090 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 18:03:08,111 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 18:03:08,111 INFO METRICS {'cpu_percent': 0.0, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 854754, 'net_bytes_recv': 60523290}
+2025-12-05 18:04:05,724 INFO INCIDENT service_down mysql metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart mysql.service: Unit mysql.service not found.
+
+2025-12-05 18:04:05,744 INFO INCIDENT service_down ssh metric=0.0 thr=0.0 action=restart_failed notes=Failed to restart ssh.service: Unit ssh.service not found.
+
+2025-12-05 18:04:05,744 INFO METRICS {'cpu_percent': 0.0, 'ram_percent': 6.3, 'disk_percent': 0.3, 'net_bytes_sent': 855060, 'net_bytes_recv': 60523596}
