@@ -1,85 +1,127 @@
 import streamlit as st
 import psutil
-import subprocess
 import pandas as pd
 import matplotlib.pyplot as plt
+import shutil
+import os
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 
-st.set_page_config(page_title="Dashboard Pro Surveillance", layout="wide")
-st.title("🚨 Dashboard Pro Surveillance Local avec Logs et Alertes")
+# --------------------------
+# CONFIGURATION
+# --------------------------
+thresholds = {
+    "cpu": 80,
+    "ram": 80,
+    "disk": 90
+}
 
-# ----- Configuration -----
-services = ["nginx"]  # فقط الخدمات الموجودة على جهازك
-refresh_interval = 5  # secondes
-thresholds = {"cpu": 80, "ram": 80, "disk": 90}  # seuils
+disk_clean_path = "/tmp"  # dossier à nettoyer si disque plein
+services = ["nginx"]      # services monitorés (ssh/mysql si installés)
 
-# ----- Auto-refresh -----
-st_autorefresh(interval=refresh_interval * 1000, limit=None, key="dashboard_refresh")
-
-# ----- DataFrames pour historique -----
+# --------------------------
+# INIT SESSION STATE
+# --------------------------
 if "history" not in st.session_state:
-    st.session_state.history = pd.DataFrame(columns=["timestamp", "cpu", "ram", "disk"])
+    st.session_state.history = pd.DataFrame(columns=["time", "cpu", "ram", "disk"])
 
 if "incidents" not in st.session_state:
-    st.session_state.incidents = pd.DataFrame(columns=["timestamp", "service", "status"])
+    st.session_state.incidents = pd.DataFrame(columns=["time", "service", "issue", "action"])
 
-# ----- Fonctions -----
-def check_service(service):
-    try:
-        res = subprocess.run(["systemctl", "is-active", service], capture_output=True, text=True)
-        status = res.stdout.strip()
-        return status
-    except Exception as e:
-        return str(e)
+# --------------------------
+# FONCTIONS
+# --------------------------
+def auto_clean_disk(threshold=90, path=disk_clean_path):
+    usage = psutil.disk_usage("/").percent
+    if usage >= threshold:
+        st.warning(f"Disk usage {usage}% >= {threshold}%, cleaning {path}...")
+        try:
+            for filename in os.listdir(path):
+                file_path = os.path.join(path, filename)
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            st.info("[AUTO-CLEAN] Done")
+        except Exception as e:
+            st.error(f"[AUTO-CLEAN] Error: {e}")
+        # Log incident
+        st.session_state.incidents = pd.concat([st.session_state.incidents, pd.DataFrame([{
+            "time": datetime.now(),
+            "service": "Disk",
+            "issue": f"Usage {usage}%",
+            "action": f"Cleaned {path}"
+        }])], ignore_index=True)
 
-def colored_metric_text(label, value, threshold):
-    color = "green" if value <= threshold else "red"
-    st.markdown(f"<h4>{label}: <span style='color:{color}'>{value}%</span></h4>", unsafe_allow_html=True)
+def colored_metric(label, value, threshold):
+    color = "normal"
+    if value >= threshold:
+        color = "inverse"
+    st.metric(label, f"{value}%", delta=None, delta_color=color)
 
-# ----- Collecte des metrics -----
+# --------------------------
+# MONITORING
+# --------------------------
 cpu = psutil.cpu_percent()
 ram = psutil.virtual_memory().percent
 disk = psutil.disk_usage("/").percent
 
-new_row = pd.DataFrame([{"timestamp": datetime.now(), "cpu": cpu, "ram": ram, "disk": disk}])
-st.session_state.history = pd.concat([st.session_state.history, new_row], ignore_index=True)
+# Add to history
+st.session_state.history = pd.concat([st.session_state.history, pd.DataFrame([{
+    "time": datetime.now(),
+    "cpu": cpu,
+    "ram": ram,
+    "disk": disk
+}])], ignore_index=True)
 
-# ----- Vérification services et logs -----
-for s in services:
-    status = check_service(s)
-    if status != "active":
-        new_incident = pd.DataFrame([{"timestamp": datetime.now(), "service": s, "status": status}])
-        st.session_state.incidents = pd.concat([st.session_state.incidents, new_incident], ignore_index=True)
+# Check thresholds
+if cpu >= thresholds["cpu"]:
+    st.session_state.incidents = pd.concat([st.session_state.incidents, pd.DataFrame([{
+        "time": datetime.now(),
+        "service": "CPU",
+        "issue": f"{cpu}%",
+        "action": "Alert"
+    }])], ignore_index=True)
 
-# ----- Affichage Metrics avec couleurs -----
-st.subheader("💻 Ressources Système")
+if ram >= thresholds["ram"]:
+    st.session_state.incidents = pd.concat([st.session_state.incidents, pd.DataFrame([{
+        "time": datetime.now(),
+        "service": "RAM",
+        "issue": f"{ram}%",
+        "action": "Alert"
+    }])], ignore_index=True)
+
+if disk >= thresholds["disk"]:
+    auto_clean_disk(threshold=thresholds["disk"], path=disk_clean_path)
+
+# --------------------------
+# STREAMLIT DASHBOARD
+# --------------------------
+st.title("Dashboard Surveillance Proactive")
+
+st.subheader("Resources Usage")
 col1, col2, col3 = st.columns(3)
-colored_metric_text("CPU Usage", cpu, thresholds["cpu"])
-colored_metric_text("RAM Usage", ram, thresholds["ram"])
-colored_metric_text("Disk Usage", disk, thresholds["disk"])
+with col1:
+    colored_metric("CPU Usage", cpu, thresholds["cpu"])
+with col2:
+    colored_metric("RAM Usage", ram, thresholds["ram"])
+with col3:
+    colored_metric("Disk Usage", disk, thresholds["disk"])
 
-# ----- Graphiques historique -----
-st.subheader("📈 Historique des ressources")
-fig, ax = plt.subplots(figsize=(10,4))
-ax.plot(st.session_state.history["timestamp"], st.session_state.history["cpu"], label="CPU", color='blue')
-ax.plot(st.session_state.history["timestamp"], st.session_state.history["ram"], label="RAM", color='orange')
-ax.plot(st.session_state.history["timestamp"], st.session_state.history["disk"], label="Disk", color='purple')
-ax.set_ylabel("%")
-ax.set_xlabel("Temps")
-ax.legend()
-st.pyplot(fig)
+st.subheader("History")
+st.line_chart(st.session_state.history.set_index("time"))
 
-# ----- Pie chart incidents -----
-st.subheader("📊 Répartition des incidents par service")
-if not st.session_state.incidents.empty:
-    count_service = st.session_state.incidents['service'].value_counts()
-    fig2, ax2 = plt.subplots()
-    ax2.pie(count_service, labels=count_service.index, autopct='%1.1f%%', colors=['red', 'blue', 'green'])
-    st.pyplot(fig2)
-else:
-    st.write("Pas d'incidents pour l'instant.")
-
-# ----- Affichage Logs -----
-st.subheader("⚠️ Incidents enregistrés")
+st.subheader("Incidents")
 st.dataframe(st.session_state.incidents)
+
+st.subheader("Pie Chart of Incidents by Service")
+if not st.session_state.incidents.empty:
+    pie_data = st.session_state.incidents["service"].value_counts()
+    fig, ax = plt.subplots()
+    ax.pie(pie_data, labels=pie_data.index, autopct="%1.1f%%")
+    st.pyplot(fig)
+
+# --------------------------
+# AUTO REFRESH
+# --------------------------
+st_autorefresh(interval=5000, key="auto_refresh")  # 5000 ms = 5 secondes

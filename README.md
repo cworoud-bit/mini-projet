@@ -1,34 +1,28 @@
-\# Surveillance automatique - Projet
+# Mini-Projet: Surveillance Proactive et Auto-Réparation
 
+## Description
+Ce projet permet de surveiller en temps réel l'état des services et des ressources système (CPU, RAM, Disk) avec auto-réparation et enregistrement des incidents. Il propose un dashboard graphique pour visualiser l'évolution des ressources et des incidents.
 
+---
 
+## Branches
 
+### main
+- Contient la version de base du dashboard.
 
-\## Prérequis
+### dashboard-with-logs
+- Version améliorée avec le fichier **`dashboard_with_logs.py`**.
+- **Features principales :**
+  - Affichage des **metrics CPU, RAM, Disk** avec couleurs (vert/rouge) selon les seuils.
+  - Historique des ressources dans un **graphique temps réel**.
+  - **Pie chart** montrant la répartition des incidents par service.
+  - Tableau des **incidents enregistrés**.
+  - **Auto-refresh** toutes les 5 secondes.
 
-\- Python 3.8+
+---
 
-\- Installer dépendances : pip install -r requirements.txt
+## Installation
 
-\- (sudoers) permettre restart systemctl sans mot de passe pour l'utilisateur si on veut aut0-restart
-
-
-
-
-
-\## Lancement
-
-\- En local : python3 monitor.py
-
-\- En service systemd : créer un service unit qui lance monitor.py
-
-
-
-
-
-\## Visualisation
-
-\- python3 visualise.py
-
-\- Ouvrir report/dashboard.html
-
+1. Cloner le dépôt :
+```bash
+git clone https://github.com/votre-utilisateur/mini-projet.git
