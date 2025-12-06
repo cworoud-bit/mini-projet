@@ -114,8 +114,13 @@ st.line_chart(st.session_state.history.set_index("time"))
 st.subheader("Incidents")
 st.dataframe(st.session_state.incidents)
 
+# --------------------------
+# Pie Chart sûr
+# --------------------------
 st.subheader("Pie Chart of Incidents by Service")
-if not st.session_state.incidents.empty:
+if st.session_state.incidents.empty or st.session_state.incidents["service"].dropna().empty:
+    st.info("Pas d'incidents pour le moment")
+else:
     pie_data = st.session_state.incidents["service"].value_counts()
     fig, ax = plt.subplots()
     ax.pie(pie_data, labels=pie_data.index, autopct="%1.1f%%")
